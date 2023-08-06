@@ -1,24 +1,29 @@
 import { MantineProvider } from "@mantine/core";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-// import { useState } from "react";
+import LoginPage from "./pages/Login";
+import { useState } from "react";
 
 function App() {
-  // const [count, setCount] = useState(0);
+  const [authOkay, setAuthOkay] = useState<Boolean>(false)
 
   return (
     <MantineProvider
       theme={{
         colorScheme: "dark",
-        fontFamily: "Poppins, sans-serif",
+        fontFamily: "Lexend, sans-serif",
       }}
       withGlobalStyles
     >
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </BrowserRouter>
+      {authOkay ? (
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </BrowserRouter>
+      ) : (
+        <LoginPage setAuthOkay={setAuthOkay} />
+      )}
     </MantineProvider>
   );
 }
