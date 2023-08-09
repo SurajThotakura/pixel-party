@@ -1,7 +1,7 @@
-import { Box, Group, Stack } from "@mantine/core";
+import { Box, SimpleGrid } from "@mantine/core";
 import { useEffect, useState } from "react";
 
-type pallet = string[];
+type pallet = [string, string, string, string, string, string, string];
 
 const colorPallet: pallet = [
   "#ffffff",
@@ -11,14 +11,12 @@ const colorPallet: pallet = [
   "#009946",
   "#534BFF",
   "#000000",
-  "#ffffff",
 ];
 
 const PIXEL_SIZE = 30;
-const ROWS = 25;
-const TOTAL_PIXELS = (1920 / PIXEL_SIZE) * ROWS;
-const CHANGE_TIME = 1500;
-const PIXEL_TRANSITION = "400ms";
+const COLUMNS = 25;
+const TOTAL_PIXELS = COLUMNS * COLUMNS;
+const CHANGE_TIME = 800;
 
 const createRandNumber = (range: number) => Math.floor(Math.random() * range);
 
@@ -33,13 +31,12 @@ const Pixel = ({ color }: PixelProps) => {
       w={PIXEL_SIZE}
       sx={{
         backgroundColor: color,
-        transitionDuration: PIXEL_TRANSITION,
       }}
     />
   );
 };
 
-const ColourGrid = () => {
+const ProgressiveGrid = () => {
   const [colors, setColors] = useState<string[]>(
     Array.from(
       { length: TOTAL_PIXELS },
@@ -48,12 +45,10 @@ const ColourGrid = () => {
   );
 
   const changeColors = () => {
-    const randomColors = colors.map((x, index) =>
-      createRandNumber(colors.length) > index &&
-      createRandNumber(colors.length) < index &&
-      createRandNumber(colors.length) > index
+    const randomColors = colors.map((_x, index, array) =>
+      colors.length - COLUMNS - 1 < index
         ? colorPallet[createRandNumber(colorPallet.length)]
-        : x
+        : array[index + COLUMNS]
     );
     setColors(randomColors);
   };
@@ -64,16 +59,14 @@ const ColourGrid = () => {
     }, CHANGE_TIME);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [colors]);
   return (
-    <Stack>
-      <Group spacing={0}>
-        {colors.map((color, index) => (
-          <Pixel color={color} key={index} />
-        ))}
-      </Group>
-    </Stack>
+    <SimpleGrid cols={COLUMNS} verticalSpacing={0} spacing={0}>
+      {colors.map((color, index) => (
+        <Pixel color={color} key={index} />
+      ))}
+    </SimpleGrid>
   );
 };
 
-export default ColourGrid;
+export default ProgressiveGrid;

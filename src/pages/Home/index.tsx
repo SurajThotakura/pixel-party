@@ -1,18 +1,27 @@
-import { Center, Group, Space, Stack, Text } from "@mantine/core";
+import { Space, Stack, Tabs, Text } from "@mantine/core";
 import ColourGrid from "../../components/ColourGrid";
+import ProgressiveGrid from "../../components/ProgressiveGrid";
 
 const Home = () => {
   return (
-    <Center h="100vh" w="100vw">
-      <Stack align="center" spacing={0}>
-        <Text fz={24}>Pixel Party 🥳</Text>
-        <Space h={48} />
-        <Group spacing={0}>
-          <ColourGrid />
-          {/* <ColourGrid /> */}
-        </Group>
+      <Stack spacing={0} align="center">
+        <Space h={32}/>
+        <Text fz={32}>Pixel Party 🥳</Text>
+        <Space h={32} />
+        <Tabs color="violet" radius="xl" variant="pills" defaultValue="twinkle" styles={{tab:{fontSize:20}}} >
+          <Tabs.List position="center">
+            <Tabs.Tab value="twinkle">Twinkle</Tabs.Tab>
+            <Tabs.Tab value="tetris">Tetris</Tabs.Tab>
+          </Tabs.List>
+          <Space h={32}/>
+          <Tabs.Panel value="twinkle">
+            <ColourGrid/>
+          </Tabs.Panel>
+          <Tabs.Panel value="tetris">
+            <ProgressiveGrid/>
+          </Tabs.Panel>
+        </Tabs>
       </Stack>
-    </Center>
   );
 };
 

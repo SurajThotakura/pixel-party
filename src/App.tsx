@@ -6,6 +6,7 @@ import { useState } from "react";
 
 function App() {
   const [authOkay, setAuthOkay] = useState<Boolean>(false)
+  const IS_AUTH_ENABLED = false
 
   return (
     <MantineProvider
@@ -15,14 +16,14 @@ function App() {
       }}
       withGlobalStyles
     >
-      {authOkay ? (
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </BrowserRouter>
-      ) : (
+      {IS_AUTH_ENABLED && !authOkay ? (
         <LoginPage setAuthOkay={setAuthOkay} />
+      ) : (
+        <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
       )}
     </MantineProvider>
   );
