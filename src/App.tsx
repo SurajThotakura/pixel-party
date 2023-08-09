@@ -15,7 +15,7 @@ function App() {
       }}
       withGlobalStyles
     >
-      {authOkay ? (
+      {true ? (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
