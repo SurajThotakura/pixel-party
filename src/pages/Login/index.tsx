@@ -17,11 +17,10 @@ interface LoginProps {
 }
 
 interface ButtonWarpperProps {
-  setAuthOkay: React.Dispatch<React.SetStateAction<Boolean>>;
-  setError : React.Dispatch<React.SetStateAction<Boolean>>;
+  validate: (uName: string, password: string) => void;
 }
 interface validatePropType {
-  validate: () => void;
+  validate: (uName: string, password: string) => void;
 }
 
 const uNameAtom = atom("");
@@ -41,6 +40,7 @@ const UserNameWrapper = () => {
 };
 
 const PasswordWrapper = ({ validate }: validatePropType) => {
+  const [uName] = useAtom(uNameAtom);
   const [password, setPassword] = useAtom(passwordAtom);
   return (
     <PasswordInput
@@ -48,36 +48,33 @@ const PasswordWrapper = ({ validate }: validatePropType) => {
       label="Password"
       value={password}
       onChange={(e) => setPassword(e.currentTarget.value)}
-      onKeyDown={getHotkeyHandler([["Enter", validate]])}
+      onKeyDown={getHotkeyHandler([["Enter", () => validate(uName, password)]])}
     />
   );
 };
 
-const ButtonWrapper = ({ setAuthOkay, setError }: ButtonWarpperProps) => {
+const ButtonWrapper = ({ validate }: ButtonWarpperProps) => {
   const [uName] = useAtom(uNameAtom);
   const [password] = useAtom(passwordAtom);
   return (
-    <Button
-      color="green"
-      onClick={() => {
-        console.log(uName, password);
-        if (
-          uName === import.meta.env.VITE_USER_NAME &&
-          password === import.meta.env.VITE_PASSWORD
-        ) {
-          setAuthOkay(true);
-          setError(false);
-        } else setError(true);
-      }}
-    >
+    <Button color="green" onClick={() => validate(uName, password)}>
       Login
     </Button>
   );
 };
 
 const LoginPage = ({ setAuthOkay }: LoginProps) => {
-  console.log("rerender");
   const [error, setError] = useState<Boolean>(false);
+
+  const validate = (uName: string, password: string) => {
+    if (
+      uName === import.meta.env.VITE_USER_NAME &&
+      password === import.meta.env.VITE_PASSWORD
+    ) {
+      setAuthOkay(true);
+      setError(false);
+    } else setError(true);
+  };
   return (
     <Provider>
       <Center
@@ -105,12 +102,12 @@ const LoginPage = ({ setAuthOkay }: LoginProps) => {
           <Stack justify="space-between" h={256}>
             <Stack>
               <UserNameWrapper />
-              <PasswordWrapper validate={() => null} />
+              <PasswordWrapper validate={validate} />
               {error && (
                 <Text color="red.5">Incorrect details, please try again</Text>
               )}
             </Stack>
-            <ButtonWrapper setAuthOkay={setAuthOkay} setError={setError} />
+            <ButtonWrapper validate={validate} />
           </Stack>
         </Box>
       </Center>
