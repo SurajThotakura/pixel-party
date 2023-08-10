@@ -1,9 +1,9 @@
 <div align="center">
   <img src="./public/assets/meta-banner.png" alt="banner" width="1200" height="auto" />
   <br />
-  <div style="font-size:56px">Pixel Party</div>
+  <h1 style="font-size:56px">Pixel Party</h1>
   
-  <div style="font-size:24px">
+  <h2 style="font-size:24px">
     Welcome to the world of pixels.
-  </div>
+  </h2>
 </div>
